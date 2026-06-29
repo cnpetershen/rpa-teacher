@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hermes-rpa-teacher"
+version = "2.0.0"
+description = "Record, review, and replay desktop automation with human-in-the-loop validation"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+dependencies = [
+    "pynput>=1.7.6",
+    "pyautogui>=0.9.54",
+    "pygetwindow>=0.0.9",
+]
+
+[tool.ruff]
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
