@@ -59,19 +59,28 @@ class CorrectionEngine:
 
         corrections = []
 
-        overall_intent = intent_info.get("overall_intent", "general_automation")
+        overall_intent = intent_info.get(
+            "overall_intent", "general_automation"
+        )
         pattern = self.INTENT_PATTERNS.get(
-            overall_intent, self.INTENT_PATTERNS["general_automation"]
+            overall_intent,
+            self.INTENT_PATTERNS["general_automation"],
         )
 
         actions = [s["action"] for s in steps]
 
-        corrections += self._check_min_steps(steps, pattern, actions)
-        corrections += self._check_must_have(steps, pattern, actions)
+        corrections += self._check_min_steps(
+            steps, pattern, actions
+        )
+        corrections += self._check_must_have(
+            steps, pattern, actions
+        )
         corrections += self._check_expected_sequence(
             steps, pattern, actions, overall_intent
         )
-        corrections += self._check_unpaired_input(steps, actions)
+        corrections += self._check_unpaired_input(
+            steps, actions
+        )
         corrections += self._check_empty_input(steps)
         corrections += self._check_window_jumps(steps)
 
