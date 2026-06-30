@@ -12,7 +12,7 @@ class Executor:
                 win.activate()
                 time.sleep(0.3)
                 return win
-        except:
+        except Exception:
             pass
         return None
 

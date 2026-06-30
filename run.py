@@ -44,7 +44,9 @@ with open(SKILL_FILE, "r", encoding="utf-8") as f:
     skill = json.load(f)
 
 builder = SkillBuilder()
-skill["human_in_the_loop"] = {"enabled": True, "reviewed_by": "human", "review_required": True}
+skill["human_in_the_loop"] = {
+    "enabled": True, "reviewed_by": "human", "review_required": True
+}
 builder.save(skill)
 
 print("[Hermes] v2 skill ready")

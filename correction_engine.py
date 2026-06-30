@@ -60,13 +60,17 @@ class CorrectionEngine:
         corrections = []
 
         overall_intent = intent_info.get("overall_intent", "general_automation")
-        pattern = self.INTENT_PATTERNS.get(overall_intent, self.INTENT_PATTERNS["general_automation"])
+        pattern = self.INTENT_PATTERNS.get(
+            overall_intent, self.INTENT_PATTERNS["general_automation"]
+        )
 
         actions = [s["action"] for s in steps]
 
         corrections += self._check_min_steps(steps, pattern, actions)
         corrections += self._check_must_have(steps, pattern, actions)
-        corrections += self._check_expected_sequence(steps, pattern, actions, overall_intent)
+        corrections += self._check_expected_sequence(
+            steps, pattern, actions, overall_intent
+        )
         corrections += self._check_unpaired_input(steps, actions)
         corrections += self._check_empty_input(steps)
         corrections += self._check_window_jumps(steps)
@@ -85,7 +89,10 @@ class CorrectionEngine:
                 "type": "MISSING_STEP",
                 "severity": "error",
                 "step_index": None,
-                "message": f"步骤数不足：当前 {len(steps)} 步，意图需要至少 {min_steps} 步",
+                "message": (
+                    f"步骤数不足：当前 {len(steps)} 步，"
+                    f"意图需要至少 {min_steps} 步"
+                ),
                 "suggestion": "请补全遗漏的操作步骤",
             })
         return corrections
@@ -126,7 +133,11 @@ class CorrectionEngine:
             if a == "type" and first_type_idx is None:
                 first_type_idx = i
 
-        if first_type_idx is not None and first_click_idx is not None and first_type_idx < first_click_idx:
+        if (
+            first_type_idx is not None
+            and first_click_idx is not None
+            and first_type_idx < first_click_idx
+        ):
             corrections.append({
                 "type": "WRONG_ORDER",
                 "severity": "warning",
@@ -143,7 +154,10 @@ class CorrectionEngine:
                     "severity": "warning",
                     "step_index": None,
                     "message": "登录流程结构异常：期望 点击→输入→点击→输入→点击 的顺序",
-                    "suggestion": "请检查操作顺序是否对应：聚焦用户名→输入→聚焦密码→输入→点击登录",
+                    "suggestion": (
+                        "请检查操作顺序是否对应："
+                        "聚焦用户名→输入→聚焦密码→输入→点击登录"
+                    ),
                 })
 
         # 对于 search/navigation 意图，检查是否有多余步骤
@@ -154,7 +168,10 @@ class CorrectionEngine:
                     "type": "EXTRA_STEP",
                     "severity": "info",
                     "step_index": 2,
-                    "message": f"检测到 {extra_count} 个多余步骤：该意图通常只需 点击→输入 两步",
+                    "message": (
+                        f"检测到 {extra_count} 个多余步骤："
+                        "该意图通常只需 点击→输入 两步"
+                    ),
                     "suggestion": "检查这些步骤是否必要，可考虑删除",
                 })
 
@@ -175,7 +192,10 @@ class CorrectionEngine:
                         "type": "UNPAIRED_INPUT",
                         "severity": "warning",
                         "step_index": i,
-                        "message": f"连续第 {consecutive_types} 次输入：中间没有点击切换目标",
+                        "message": (
+                        f"连续第 {consecutive_types} 次输入："
+                        "中间没有点击切换目标"
+                    ),
                         "suggestion": "在连续输入之间添加点击操作来切换输入焦点",
                     })
             else:

@@ -30,7 +30,7 @@ class ReviewUI:
                 self.steps = data.get("steps", [])
                 self.intent = data.get("intent", {})
                 self.corrections = data.get("corrections", [])
-        except:
+        except Exception:
             self.steps = []
             self.intent = {}
             self.corrections = []
@@ -44,11 +44,19 @@ class ReviewUI:
         intent_frame = tk.Frame(self.root, relief=tk.RIDGE, bd=2)
         intent_frame.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
 
-        tk.Label(intent_frame, text="Recognized Intent:", font=("Arial", 9, "bold")).pack(side=tk.LEFT, padx=5)
+        tk.Label(
+            intent_frame, text="Recognized Intent:",
+            font=("Arial", 9, "bold")
+        ).pack(side=tk.LEFT, padx=5)
         self.intent_var = tk.StringVar()
-        self.intent_entry = tk.Entry(intent_frame, textvariable=self.intent_var, width=20)
+        self.intent_entry = tk.Entry(
+            intent_frame, textvariable=self.intent_var, width=20
+        )
         self.intent_entry.pack(side=tk.LEFT, padx=2)
-        tk.Button(intent_frame, text="Update Intent", command=self.update_intent).pack(side=tk.LEFT, padx=5)
+        tk.Button(
+            intent_frame, text="Update Intent",
+            command=self.update_intent
+        ).pack(side=tk.LEFT, padx=5)
 
         self.phases_var = tk.StringVar()
         tk.Label(intent_frame, text="Phases:").pack(side=tk.LEFT, padx=(15, 2))
@@ -92,7 +100,10 @@ class ReviewUI:
         self.label_entry.pack(fill=tk.X)
 
         # correction list
-        tk.Label(right, text="Corrections (纠偏建议)", font=("Arial", 9, "bold")).pack(fill=tk.X, pady=(10, 2))
+        tk.Label(
+            right, text="Corrections (纠偏建议)",
+            font=("Arial", 9, "bold")
+        ).pack(fill=tk.X, pady=(10, 2))
         self.correction_listbox = tk.Listbox(right, height=5, fg="red")
         self.correction_listbox.pack(fill=tk.X, padx=2)
         self.correction_listbox.bind("<<ListboxSelect>>", self.on_correction_select)

@@ -53,7 +53,7 @@ class RPARecorder:
             title = win.title if win else "unknown"
             rel_x = x - win.left
             rel_y = y - win.top
-        except:
+        except Exception:
             title = "unknown"
             rel_x = x
             rel_y = y
@@ -67,6 +67,7 @@ class RPARecorder:
             "window": title,
             "ts": time.time()
         })
+
 
     # -------------------------
     # keyboard input
@@ -82,7 +83,7 @@ class RPARecorder:
 
         try:
             k = key.char
-        except:
+        except Exception:
             k = str(key)
 
         self.events.append({
