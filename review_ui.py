@@ -1,6 +1,7 @@
 import json
 import tkinter as tk
 
+
 class ReviewUI:
 
     def __init__(self, steps_file="skill.json"):
@@ -25,11 +26,15 @@ class ReviewUI:
     # -------------------------
     def load_steps(self):
         try:
-            with open(self.steps_file, "r", encoding="utf-8") as f:
+            with open(
+                self.steps_file, "r", encoding="utf-8"
+            ) as f:
                 data = json.load(f)
                 self.steps = data.get("steps", [])
                 self.intent = data.get("intent", {})
-                self.corrections = data.get("corrections", [])
+                self.corrections = data.get(
+                    "corrections", []
+                )
         except Exception:
             self.steps = []
             self.intent = {}
@@ -41,92 +46,153 @@ class ReviewUI:
     def build_ui(self):
 
         # top frame: intent info
-        intent_frame = tk.Frame(self.root, relief=tk.RIDGE, bd=2)
-        intent_frame.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+        intent_frame = tk.Frame(
+            self.root, relief=tk.RIDGE, bd=2
+        )
+        intent_frame.pack(
+            side=tk.TOP, fill=tk.X, padx=5, pady=5
+        )
 
         tk.Label(
-            intent_frame, text="Recognized Intent:",
+            intent_frame,
+            text="Recognized Intent:",
             font=("Arial", 9, "bold")
         ).pack(side=tk.LEFT, padx=5)
         self.intent_var = tk.StringVar()
         self.intent_entry = tk.Entry(
-            intent_frame, textvariable=self.intent_var, width=20
+            intent_frame,
+            textvariable=self.intent_var,
+            width=20
         )
         self.intent_entry.pack(side=tk.LEFT, padx=2)
         tk.Button(
-            intent_frame, text="Update Intent",
+            intent_frame,
+            text="Update Intent",
             command=self.update_intent
         ).pack(side=tk.LEFT, padx=5)
 
         self.phases_var = tk.StringVar()
-        tk.Label(intent_frame, text="Phases:").pack(side=tk.LEFT, padx=(15, 2))
-        tk.Label(intent_frame, textvariable=self.phases_var).pack(side=tk.LEFT)
+        tk.Label(
+            intent_frame, text="Phases:"
+        ).pack(side=tk.LEFT, padx=(15, 2))
+        tk.Label(
+            intent_frame,
+            textvariable=self.phases_var
+        ).pack(side=tk.LEFT)
 
         # main content area
         main_area = tk.Frame(self.root)
-        main_area.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        main_area.pack(
+            side=tk.TOP, fill=tk.BOTH, expand=True
+        )
 
         # left side list
         self.listbox = tk.Listbox(main_area, width=55)
-        self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=False)
-        self.listbox.bind("<<ListboxSelect>>", self.on_select)
+        self.listbox.pack(
+            side=tk.LEFT, fill=tk.BOTH, expand=False
+        )
+        self.listbox.bind(
+            "<<ListboxSelect>>", self.on_select
+        )
 
         # right side editor
         right = tk.Frame(main_area)
-        right.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        right.pack(
+            side=tk.RIGHT, fill=tk.BOTH, expand=True
+        )
 
         # action
         tk.Label(right, text="Action").pack()
         self.action_var = tk.StringVar()
-        self.action_entry = tk.Entry(right, textvariable=self.action_var)
+        self.action_entry = tk.Entry(
+            right, textvariable=self.action_var
+        )
         self.action_entry.pack(fill=tk.X)
 
         # value
         tk.Label(right, text="Value / Params").pack()
         self.value_var = tk.StringVar()
-        self.value_entry = tk.Entry(right, textvariable=self.value_var)
+        self.value_entry = tk.Entry(
+            right, textvariable=self.value_var
+        )
         self.value_entry.pack(fill=tk.X)
 
         # intent (per-step)
-        tk.Label(right, text="Intent (auto-recognized)").pack()
+        tk.Label(
+            right, text="Intent (auto-recognized)"
+        ).pack()
         self.step_intent_var = tk.StringVar()
-        self.step_intent_entry = tk.Entry(right, textvariable=self.step_intent_var)
+        self.step_intent_entry = tk.Entry(
+            right, textvariable=self.step_intent_var
+        )
         self.step_intent_entry.pack(fill=tk.X)
 
         # label (semantic)
-        tk.Label(right, text="Label (optional)").pack()
+        tk.Label(
+            right, text="Label (optional)"
+        ).pack()
         self.label_var = tk.StringVar()
-        self.label_entry = tk.Entry(right, textvariable=self.label_var)
+        self.label_entry = tk.Entry(
+            right, textvariable=self.label_var
+        )
         self.label_entry.pack(fill=tk.X)
 
         # correction list
         tk.Label(
-            right, text="Corrections (纠偏建议)",
+            right,
+            text="Corrections (纠偏建议)",
             font=("Arial", 9, "bold")
         ).pack(fill=tk.X, pady=(10, 2))
-        self.correction_listbox = tk.Listbox(right, height=5, fg="red")
-        self.correction_listbox.pack(fill=tk.X, padx=2)
-        self.correction_listbox.bind("<<ListboxSelect>>", self.on_correction_select)
+        self.correction_listbox = tk.Listbox(
+            right, height=5, fg="red"
+        )
+        self.correction_listbox.pack(
+            fill=tk.X, padx=2
+        )
+        self.correction_listbox.bind(
+            "<<ListboxSelect>>",
+            self.on_correction_select
+        )
 
         # ---------------- buttons ----------------
         btn_frame = tk.Frame(right)
         btn_frame.pack(fill=tk.X, pady=10)
 
-        tk.Button(btn_frame, text="Update", command=self.update_step).pack(side=tk.LEFT)
-        tk.Button(btn_frame, text="Delete", command=self.delete_step).pack(side=tk.LEFT)
-        tk.Button(btn_frame, text="Up", command=self.move_up).pack(side=tk.LEFT)
-        tk.Button(btn_frame, text="Down", command=self.move_down).pack(side=tk.LEFT)
-        tk.Button(btn_frame, text="Save", command=self.save).pack(side=tk.LEFT)
+        tk.Button(
+            btn_frame, text="Update",
+            command=self.update_step
+        ).pack(side=tk.LEFT)
+        tk.Button(
+            btn_frame, text="Delete",
+            command=self.delete_step
+        ).pack(side=tk.LEFT)
+        tk.Button(
+            btn_frame, text="Up",
+            command=self.move_up
+        ).pack(side=tk.LEFT)
+        tk.Button(
+            btn_frame, text="Down",
+            command=self.move_down
+        ).pack(side=tk.LEFT)
+        tk.Button(
+            btn_frame, text="Save",
+            command=self.save
+        ).pack(side=tk.LEFT)
 
     # -------------------------
     # refresh intent bar
     # -------------------------
     def refresh_intent_bar(self):
-        intent = self.intent.get("overall_intent", "unknown")
+        intent = self.intent.get(
+            "overall_intent", "unknown"
+        )
         self.intent_var.set(intent)
 
         phases = self.intent.get("phases", [])
-        self.phases_var.set(", ".join(phases) if phases else "(none)")
+        if phases:
+            self.phases_var.set(", ".join(phases))
+        else:
+            self.phases_var.set("(none)")
 
     # -------------------------
     # refresh list
@@ -140,7 +206,10 @@ class ReviewUI:
             value = s.get("value", "")
             intent = s.get("intent", "")
 
-            display = f"{i}. {action} | {value} | intent:{intent} | {label}"
+            display = (
+                f"{i}. {action} | {value}"
+                f" | intent:{intent} | {label}"
+            )
             self.listbox.insert(tk.END, display)
 
     # -------------------------
@@ -160,14 +229,27 @@ class ReviewUI:
     def refresh_corrections(self):
         self.correction_listbox.delete(0, tk.END)
         if not self.corrections:
-            self.correction_listbox.insert(tk.END, "(No issues found)")
+            self.correction_listbox.insert(
+                tk.END, "(No issues found)"
+            )
             return
 
-        severity_icons = {"error": "!!", "warning": "!", "info": "i"}
+        severity_icons = {
+            "error": "!!",
+            "warning": "!",
+            "info": "i"
+        }
         for i, c in enumerate(self.corrections):
-            icon = severity_icons.get(c.get("severity", "info"), "?")
-            display = f"{icon} [{c['type']}] {c['message']}"
-            self.correction_listbox.insert(tk.END, display)
+            icon = severity_icons.get(
+                c.get("severity", "info"), "?"
+            )
+            display = (
+                f"{icon} [{c['type']}] "
+                f"{c['message']}"
+            )
+            self.correction_listbox.insert(
+                tk.END, display
+            )
 
     # -------------------------
     # correction selected
@@ -175,17 +257,20 @@ class ReviewUI:
     def on_correction_select(self, event):
         if not self.correction_listbox.curselection():
             return
-        index = self.correction_listbox.curselection()[0]
+        index = (
+            self.correction_listbox.curselection()[0]
+        )
         if index >= len(self.corrections):
             return
         c = self.corrections[index]
         step_idx = c.get("step_index")
-        if step_idx is not None and 0 <= step_idx < len(self.steps):
-            self.listbox.selection_clear(0, tk.END)
-            self.listbox.selection_set(step_idx)
-            self.listbox.see(step_idx)
-            self.selected_index = step_idx
-            self._load_step_into_editor(step_idx)
+        if step_idx is not None:
+            if 0 <= step_idx < len(self.steps):
+                self.listbox.selection_clear(0, tk.END)
+                self.listbox.selection_set(step_idx)
+                self.listbox.see(step_idx)
+                self.selected_index = step_idx
+                self._load_step_into_editor(step_idx)
 
     # -------------------------
     # load step into editor
@@ -194,15 +279,22 @@ class ReviewUI:
         step = self.steps[index]
         self.action_var.set(step.get("action", ""))
         self.value_var.set(step.get("value", ""))
-        self.step_intent_var.set(step.get("intent", ""))
+        self.step_intent_var.set(
+            step.get("intent", "")
+        )
         self.label_var.set(step.get("label", ""))
 
     # -------------------------
     # update overall intent
     # -------------------------
     def update_intent(self):
-        self.intent["overall_intent"] = self.intent_var.get()
-        print(f"[Hermes] Intent updated to: {self.intent_var.get()}")
+        self.intent["overall_intent"] = (
+            self.intent_var.get()
+        )
+        print(
+            "[Hermes] Intent updated to: "
+            f"{self.intent_var.get()}"
+        )
 
     # -------------------------
     # update step
@@ -240,7 +332,9 @@ class ReviewUI:
         if i is None or i == 0:
             return
 
-        self.steps[i], self.steps[i-1] = self.steps[i-1], self.steps[i]
+        self.steps[i], self.steps[i-1] = (
+            self.steps[i-1], self.steps[i]
+        )
         self.selected_index -= 1
 
         self.refresh_list()
@@ -253,7 +347,9 @@ class ReviewUI:
         if i is None or i >= len(self.steps) - 1:
             return
 
-        self.steps[i], self.steps[i+1] = self.steps[i+1], self.steps[i]
+        self.steps[i], self.steps[i+1] = (
+            self.steps[i+1], self.steps[i]
+        )
         self.selected_index += 1
 
         self.refresh_list()
@@ -262,13 +358,16 @@ class ReviewUI:
     # save skill
     # -------------------------
     def save(self):
-        with open("skill.json", "w", encoding="utf-8") as f:
+        with open(
+            "skill.json", "w", encoding="utf-8"
+        ) as f:
             json.dump({
                 "steps": self.steps,
                 "intent": self.intent,
                 "corrections": self.corrections,
             }, f, indent=2, ensure_ascii=False)
         print("[Hermes] HUMAN REVIEW SAVED")
+
 
 # -------------------------
 # launch

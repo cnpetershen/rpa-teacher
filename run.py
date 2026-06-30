@@ -18,17 +18,31 @@ events = rec.stop()
 steps = Interpreter().convert(events)
 
 print("[Hermes] Analyzing user intent...")
-enriched_steps, intent_info = IntentRecognizer().analyze(steps)
-print(f"[Hermes] Intent recognized: {intent_info.get('overall_intent', 'unknown')}")
+enriched_steps, intent_info = (
+    IntentRecognizer().analyze(steps)
+)
+print(
+    "[Hermes] Intent recognized: "
+    f"{intent_info.get('overall_intent', 'unknown')}"
+)
 
 print("[Hermes] Checking for deviations...")
-corrections = CorrectionEngine().correct(enriched_steps, intent_info)
+corrections = CorrectionEngine().correct(
+    enriched_steps, intent_info
+)
 if corrections:
-    print(f"[Hermes] Found {len(corrections)} issue(s):")
+    print(
+        f"[Hermes] Found {len(corrections)} issue(s):"
+    )
     for c in corrections:
-        print(f"       [{c['severity']}] {c['message']}")
+        print(
+            f"       [{c['severity']}] {c['message']}"
+        )
 else:
-    print("[Hermes] No issues found - clean demonstration!")
+    print(
+        "[Hermes] No issues found "
+        "- clean demonstration!"
+    )
 
 with open(SKILL_FILE, "w", encoding="utf-8") as f:
     json.dump({
@@ -45,7 +59,9 @@ with open(SKILL_FILE, "r", encoding="utf-8") as f:
 
 builder = SkillBuilder()
 skill["human_in_the_loop"] = {
-    "enabled": True, "reviewed_by": "human", "review_required": True
+    "enabled": True,
+    "reviewed_by": "human",
+    "review_required": True
 }
 builder.save(skill)
 

@@ -2,6 +2,7 @@ import pyautogui
 import time
 import pygetwindow as gw
 
+
 class Executor:
 
     def _activate_window(self, title):
@@ -24,8 +25,14 @@ class Executor:
 
             try:
                 if step["action"] == "click":
-                    win = self._activate_window(step.get("window", ""))
-                    if win and "rel_x" in step and "rel_y" in step:
+                    win = self._activate_window(
+                        step.get("window", "")
+                    )
+                    if (
+                        win
+                        and "rel_x" in step
+                        and "rel_y" in step
+                    ):
                         x = win.left + step["rel_x"]
                         y = win.top + step["rel_y"]
                     else:

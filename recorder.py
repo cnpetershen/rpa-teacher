@@ -4,6 +4,7 @@ import os
 from pynput import mouse, keyboard
 import pygetwindow as gw
 
+
 class RPARecorder:
 
     def __init__(self):
@@ -17,10 +18,15 @@ class RPARecorder:
         self.recording = True
         self.events = []
 
-        print("[Hermes] Recording started... Press Enter in terminal to stop.")
+        print("[Hermes] Recording started..."
+              " Press Enter in terminal to stop.")
 
-        self.mouse_listener = mouse.Listener(on_click=self.on_click)
-        self.keyboard_listener = keyboard.Listener(on_press=self.on_press)
+        self.mouse_listener = mouse.Listener(
+            on_click=self.on_click
+        )
+        self.keyboard_listener = keyboard.Listener(
+            on_press=self.on_press
+        )
 
         self.mouse_listener.start()
         self.keyboard_listener.start()
@@ -35,8 +41,12 @@ class RPARecorder:
         self.keyboard_listener.stop()
 
         os.makedirs("logs", exist_ok=True)
-        with open("logs/raw_events.json", "w", encoding="utf-8") as f:
-            json.dump(self.events, f, indent=2, ensure_ascii=False)
+        path = "logs/raw_events.json"
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(
+                self.events, f,
+                indent=2, ensure_ascii=False
+            )
 
         print(f"[Hermes] Saved {len(self.events)} events")
         return self.events
@@ -68,7 +78,6 @@ class RPARecorder:
             "ts": time.time()
         })
 
-
     # -------------------------
     # keyboard input
     # -------------------------
@@ -76,7 +85,8 @@ class RPARecorder:
         if not self.recording:
             return
 
-        # Enter stops recording (event handled by run.py)
+        # Enter stops recording
+        # (event handled by run.py)
         if key == keyboard.Key.enter:
             self.recording = False
             return False

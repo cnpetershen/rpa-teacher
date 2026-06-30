@@ -1,6 +1,7 @@
 import json
 import time
 
+
 class SkillBuilder:
 
     def build(self, steps, name, reviewed_by="human"):
@@ -8,7 +9,9 @@ class SkillBuilder:
         return {
             "name": name,
             "version": "2.0",
-            "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "created_at": time.strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
 
             # human-in-the-loop metadata
             "human_in_the_loop": {
@@ -23,10 +26,20 @@ class SkillBuilder:
     def save(self, skill, path="skill.json"):
 
         # enforce human review before save
-        if not skill.get("human_in_the_loop", {}).get("enabled"):
-            raise Exception("Skill must go through human review layer")
+        hitl = skill.get("human_in_the_loop", {})
+        if not hitl.get("enabled"):
+            raise Exception(
+                "Skill must go through "
+                "human review layer"
+            )
 
         with open(path, "w", encoding="utf-8") as f:
-            json.dump(skill, f, indent=2, ensure_ascii=False)
+            json.dump(
+                skill, f,
+                indent=2, ensure_ascii=False
+            )
 
-        print("[Hermes v2] Skill saved with HUMAN REVIEW FLAG")
+        print(
+            "[Hermes v2] Skill saved "
+            "with HUMAN REVIEW FLAG"
+        )
